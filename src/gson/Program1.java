@@ -13,6 +13,7 @@ import com.google.gson.JsonPrimitive;
 //JsonArray(js의 배열)
 //JsonObject(js의 객체)
 
+//js요소인 JsonElement를 JSON으로 추가
 public class Program1 {
 	public static void main(String[] args) {
 

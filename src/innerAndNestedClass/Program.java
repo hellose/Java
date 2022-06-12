@@ -12,15 +12,13 @@ class Program {
 //SecondLevel을 참조하기 위해서는 FirstLevel.SecondLevel을 사용해야 한다.
 class TestClass {
 
-	private static final FirstLevel first = new FirstLevel();
-	private static final FirstLevel.SecondLevel second = new FirstLevel.SecondLevel(); // new SecondLevel(); //에러
-
 	private static class FirstLevel {
-
 		private static class SecondLevel {
 		}
-
 	}
+
+	private static final FirstLevel first = new FirstLevel();
+	private static final FirstLevel.SecondLevel second = new FirstLevel.SecondLevel(); // new SecondLevel(); //에러
 
 	// = TestClass.FirstLevel getFirstLevelInstance(){
 	FirstLevel getFirstLevelInstance() {

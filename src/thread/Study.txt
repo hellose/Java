@@ -1,0 +1,100 @@
+-- Runnable 인터페이스 
+
+	@FunctionalInterface
+	public interface Runnable {
+    	public abstract void run();
+	}
+
+
+-- Thread implements Runnable (스레드는 스레드 그룹에 포함된다)
+
+public class Thread implements Runnable {
+    
+    //스레드 이름
+    private volatile String name; 
+    
+    //현재 스레드 제어권 우선순위
+    private int priority; 
+    
+    //일반 스레드인지 데몬 스레드인지 
+    private boolean daemon = false; 
+    
+    //어떤 코드를 실행할 것인지
+    private Runnable target; 
+    
+    //현재 스레드가 속한 스레드 그룹
+    private ThreadGroup group; 
+    
+  	//스레드가 가질 수 있는 최소 우선순위 값
+    public final static int MIN_PRIORITY = 1; 
+    
+    //스레드의 default 우선순위
+    public final static int NORM_PRIORITY = 5;
+    
+    //스레드가 가질 수 있는 최대 우선순위 값
+    public final static int MAX_PRIORITY = 10; 	
+    
+    //스레드의 Runnable 인터페이스 run()메서드 구현
+    @Override
+    public void run() {
+    	//멤버 Runnable target이 존재하면 해당 코드를 실행
+    	//멤버 Runnable target이 null이면 아무것도 하지 않음
+        if (target != null) {
+            target.run();
+        }
+    }
+	//....
+}
+
+run() 현재 스레드의 stack에 run()메서드만 호출
+start() 현재 스레드에서 start()메서드가 호출됨 -> start()메서드는 새로운 스레드를 생성하고 스레드의 생성된 stack에서 run()메서드가 호출된다.
+ 
+ -- ThreadGroup (스레드 그룹은 스레드 뿐만아니라 스레드 그룹도 포함할 수 있다)
+ 
+public class ThreadGroup implements Thread.UncaughtExceptionHandler {
+
+	//이 스레드 그룹의 부모 스레드 그룹 
+  	private final ThreadGroup parent;
+  	
+  	//이 스레드 그룹의 이름
+    String name;
+    
+    //이 스레드 그룹에 포함될 스레드,스레드 그룹이 가질 수 있는 최대 우선순위 값
+    int maxPriority;
+   	
+   	//이 스레드 그룹에 포함된 스레드들
+    Thread threads[];
+	
+	//이 스레드 그룹에 포함된 스레드 그룹들
+    ThreadGroup groups[];
+    
+    
+스레드 그룹(system) -> 여러 스레드들 (가비지 컬렉션 스레드등..)
+				-> 스레드 그룹(main) -> 스레드(main)
+
+-- 자바의 인터럽트 메카니즘 (인터럽트 상태와 인터럽트 예외)
+
+//thread변수에 해당하는 스레드의 인터럽트 상태를 체크한다.(인터럽트 상태를 변경하지 않고 확인만 한다)
+thread변수.isInterrupted(); 
+
+// 현재 스레드의 인터럽트 상태를 리턴한 뒤 인터럽트 상태를 false로 초기화한다.(인터럽트 상태 확인 후 인터럽트 상태가 자동으로 false로 변경됨)
+Thread.interrupted(); 
+
+//workerThread에 인터럽트를 건다.
+//start되지 않았거나, 이미 작업이 끝난 스레드에 인터럽트를 걸어도 스레드의 인터럽트는 true로 변하지 않고 false를 유지한다.
+workerThread.interrupt(); 
+
+Thread.sleep()메서드의 호출 시작시점부터 호출 끝시점 사이에 스레드 인터럽트 플래그가 true면 InterruptedException이 발생한다.
+
+
+-- Thread.yield()
+현재 스레드가 yield()를 만나면 제어권을 다음 실행 스레드에 넘겨주고 현재 스레드는 대기 상태로 들어간다.
+아무것도 하지 않는 반복문을 돌경우 yield()를 사용할 수 있다.
+
+-- thread변수.join()
+ public final void join() throws InterruptedException
+ 
+
+
+
+

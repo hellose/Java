@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
+//Java객체를 JSON에 추가
 public class Program2 {
 
 	public static void main(String[] args) {
