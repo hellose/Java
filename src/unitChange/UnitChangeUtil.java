@@ -3,8 +3,11 @@ package unitChange;
 public class UnitChangeUtil {
 
 	public static void main(String[] args) {
-		String test = "123456789kib";
-		System.out.println(changeUnitString(test, Unit.MEBI_BYTE, true));
+		String test = "700m";
+		System.out.println(changeUnitString(test, null));
+		String test2 = "30191896Ki";
+		System.out.println(changeUnitString(test2, Unit.GIBI_BYTE));
+		System.out.println(changeUnitString(test2, Unit.MEBI_BYTE));
 	}
 
 	public static class CanNotParseUnitException extends Exception {
@@ -30,47 +33,111 @@ public class UnitChangeUtil {
 		}
 	}
 
+	// 유닛이 m일때 계산
+	private static double calculateLowerCaseM(double before) {
+		return before / 1000.0d;
+	}
+
+	// @NotNull currentUnit, changedUnit
+	private static double calculateGeneralUnit(double before, UnitChangeUtil.Unit currentUnit,
+			UnitChangeUtil.Unit changedUnit) {
+
+		if ((currentUnit == null) || (changedUnit == null)) {
+			return before;
+		}
+
+		double twoPowerTen = 1024d; // 2^10
+		double tenPowerThree = 1000d; // 10^3
+
+		double whatByte = -1d;
+		// 넘겨받은 값을 바이트 값으로 변환
+		if (currentUnit.equals(Unit.MEBI_BYTE)) {
+			whatByte = before * (Math.pow(twoPowerTen, 2.0));
+		}
+		if (currentUnit.equals(Unit.KIBI_BYTE)) {
+			whatByte = before * twoPowerTen;
+		}
+		if (currentUnit.equals(Unit.GIBI_BYTE)) {
+			whatByte = before * (Math.pow(twoPowerTen, 3.0));
+		}
+		if (currentUnit.equals(Unit.MEGA_BYTE)) {
+			whatByte = before * (Math.pow(tenPowerThree, 2.0));
+		}
+		if (currentUnit.equals(Unit.KILO_BYTE)) {
+			whatByte = before * tenPowerThree;
+		}
+		if (currentUnit.equals(Unit.GIGA_BYTE)) {
+			whatByte = before * (Math.pow(tenPowerThree, 3.0));
+		}
+
+		double result = -1d;
+		// 해당 바이트 값을 원하는 단위로 변환
+		if (changedUnit.equals(Unit.MEBI_BYTE)) {
+			result = whatByte / (Math.pow(twoPowerTen, 2.0));
+		}
+		if (changedUnit.equals(Unit.KIBI_BYTE)) {
+			result = whatByte / twoPowerTen;
+		}
+		if (changedUnit.equals(Unit.GIBI_BYTE)) {
+			result = whatByte / (Math.pow(twoPowerTen, 3.0));
+		}
+		if (changedUnit.equals(Unit.MEGA_BYTE)) {
+			result = whatByte / (Math.pow(tenPowerThree, 2.0));
+		}
+		if (changedUnit.equals(Unit.KILO_BYTE)) {
+			result = whatByte / tenPowerThree;
+		}
+		if (changedUnit.equals(Unit.GIGA_BYTE)) {
+			result = whatByte / (Math.pow(tenPowerThree, 3.0));
+		}
+
+		return result;
+	}
+
 	// String에 단위가 존재하지 않으면 받은 스트링 그대로 리턴, 단위가 존재하면 해당 스트링으로 변환한다.
 	// 인자 스트링에 단위가 없으면 boolean은 무시된다.
-	public static String changeUnitString(String beforeChanged, UnitChangeUtil.Unit toBeChangedUnit,
-			boolean includeUnitString) {
+	// public static double changeUnitString(String beforeChanged,
+	// UnitChangeUtil.Unit toBeChangedUnit) {
+	public static String changeUnitString(String beforeChanged, UnitChangeUtil.Unit toBeChangedUnit) {
 
+		// firstUnitCharIndex() - 스트링에 단위에 해당하는 첫 문자 인덱스 리턴 or 단위없으면 -1리턴
 		int firstOccurence = firstUnitCharIndex(beforeChanged);
 		if (firstOccurence == -1) {
+			// 단위 문자가 포함되어 있지 않으면 전달된 beforeChanged 그대로 리턴
 			return beforeChanged;
 		}
 
+		// beforeChanged에는 단위가 포함되어있음
+
+		// 단위 스트링
 		String unitString = beforeChanged.substring(firstOccurence);
+		// 단위 제거된 값만 존재하는 스트링
 		String unitRemovedString = beforeChanged.substring(0, firstOccurence);
+		// 단위 계산전 double로 변환
 		double beforeCalculated = Double.parseDouble(unitRemovedString);
 
 		UnitChangeUtil.Unit parsedUnit;
 		try {
+			// checkUnit() - 단위 스트링의 단위를 체크
 			parsedUnit = checkUnit(unitString);
 		} catch (CanNotParseUnitException e) {
+			// 다른 단위 추가 필요
 			e.printStackTrace();
 			return beforeChanged;
 		}
 
 		double afterCalculated;
+		// cpu core 계산
 		if (Unit.LOWER_CASE_M.equals(parsedUnit)) {
 			afterCalculated = calculateLowerCaseM(beforeCalculated);
 			return String.format("%.2f", afterCalculated);
 		} else {
+			// 이외의 값 계산
 			if (toBeChangedUnit == null) {
 				throw new IllegalArgumentException("changedUnitString method changedUnit argument is null");
 			}
 			afterCalculated = calculateGeneralUnit(beforeCalculated, parsedUnit, toBeChangedUnit);
-		}
-
-		if (parsedUnit.equals(Unit.LOWER_CASE_M)) {
 			return String.format("%.2f", afterCalculated);
-		} else {
-			if (includeUnitString) {
-				return Double.toString(afterCalculated) + toBeChangedUnit.getValue();
-			} else {
-				return Double.toString(afterCalculated);
-			}
 		}
 
 	}
@@ -97,26 +164,26 @@ public class UnitChangeUtil {
 				break;
 			}
 		}
-
 		return unitIndex;
 	}
 
+	// 단위 스트링에 해당하는 str이 어떠한 단위인지 체크
 	private static UnitChangeUtil.Unit checkUnit(String str) throws CanNotParseUnitException {
 		// 쿠버네티스 메비,키비,기비
 		if (isLowerCaseM(str)) {
-			return Unit.MEBI_BYTE;
-		} else if (isMebi(str)) {
-			return Unit.KIBI_BYTE;
-		} else if (isKibi(str)) {
-			return Unit.GIBI_BYTE;
-		} else if (isGibi(str)) {
 			return Unit.LOWER_CASE_M;
+		} else if (isMebi(str)) {
+			return Unit.MEBI_BYTE;
+		} else if (isKibi(str)) {
+			return Unit.KIBI_BYTE;
+		} else if (isGibi(str)) {
+			return Unit.GIBI_BYTE;
 		} else if (isMega(str)) {
 			return Unit.MEGA_BYTE;
 		} else if (isKilo(str)) {
-			return Unit.MEGA_BYTE;
+			return Unit.KILO_BYTE;
 		} else if (isGiga(str)) {
-			return Unit.MEGA_BYTE;
+			return Unit.GIGA_BYTE;
 		}
 
 		throw new CanNotParseUnitException("UnitChangeUtil's checkUnit method can\'t parse unit");
@@ -169,66 +236,6 @@ public class UnitChangeUtil {
 			return true;
 		}
 		return false;
-	}
-
-	private static double calculateLowerCaseM(double before) {
-		return before * 1000;
-	}
-
-	// @NotNull changedUnit
-	private static double calculateGeneralUnit(double before, UnitChangeUtil.Unit currentUnit,
-			UnitChangeUtil.Unit changedUnit) {
-
-		if ((currentUnit == null) || (changedUnit == null)) {
-			return before;
-		}
-
-		double twoPowerTen = Math.pow(2.0d, 10.0d); // 2^10
-		double tenPowerThree = Math.pow(10.0d, 3.0d); // 10^3
-
-		double whatByte = -1d;
-		// 넘겨받은 값을 바이트 값으로 변환
-		if (currentUnit.equals(Unit.MEBI_BYTE)) {
-			whatByte = before / (Math.pow(twoPowerTen, 2.0));
-		}
-		if (currentUnit.equals(Unit.KIBI_BYTE)) {
-			whatByte = before / (Math.pow(twoPowerTen, 1.0));
-		}
-		if (currentUnit.equals(Unit.GIBI_BYTE)) {
-			whatByte = before / (Math.pow(twoPowerTen, 3.0));
-		}
-		if (currentUnit.equals(Unit.MEGA_BYTE)) {
-			whatByte = before / (Math.pow(tenPowerThree, 2.0));
-		}
-		if (currentUnit.equals(Unit.KILO_BYTE)) {
-			whatByte = before / (Math.pow(tenPowerThree, 1.0));
-		}
-		if (currentUnit.equals(Unit.GIGA_BYTE)) {
-			whatByte = before / (Math.pow(tenPowerThree, 3.0));
-		}
-
-		double result = -1d;
-		// 해당 바이트 값을 원하는 단위로 변환
-		if (changedUnit.equals(Unit.MEBI_BYTE)) {
-			result = whatByte * (Math.pow(twoPowerTen, 2.0));
-		}
-		if (changedUnit.equals(Unit.KIBI_BYTE)) {
-			result = whatByte * (Math.pow(twoPowerTen, 1.0));
-		}
-		if (changedUnit.equals(Unit.GIBI_BYTE)) {
-			result = whatByte * (Math.pow(twoPowerTen, 3.0));
-		}
-		if (changedUnit.equals(Unit.MEGA_BYTE)) {
-			result = whatByte * (Math.pow(tenPowerThree, 2.0));
-		}
-		if (changedUnit.equals(Unit.KILO_BYTE)) {
-			result = whatByte * (Math.pow(tenPowerThree, 1.0));
-		}
-		if (changedUnit.equals(Unit.GIGA_BYTE)) {
-			result = whatByte * (Math.pow(tenPowerThree, 3.0));
-		}
-		return result;
-
 	}
 
 }
