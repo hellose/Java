@@ -40,11 +40,15 @@ public int read() throws IOException { //내부에서는 기반 인풋 스트림
 }
 
 
-1-6. FilterOutputStream (바이트 기반 보조 아웃풋 스트림의 최상위 보조 아웃춧 스트림)
+1-6. FilterOutputStream (바이트 기반 보조 아웃풋 스트림의 최상위 보조 아웃풋 스트림)
 FilterInputStream처럼 기반 아웃풋 스트림 메서드를 그대로 호출함.
 
 
+1-7. BufferedInputStream
+read메서드 호출시 마다 하드 디스크의 입출력 비용 문제로 버퍼에 미리 값을 떙겨 놓은 뒤 버퍼의 바이트를 읽고 버퍼에서 다 읽으면 버퍼에 다시 채움
 
+1-8. Reader 추상 클래스 (내부에 skipBuffer가 존재하는데 존재이유를 모르겠다)
+1-9. CharArrayReader (인메모리 char[]에서 읽음. 바이트 기반 ByteArrayInputStream과 비슷함. available대신 ready가 존재하는 듯)
 
 
 
