@@ -15,3 +15,4 @@
 2022.07.01
 - Stream 기초 예제
 - Function, Supplier, Consumer, Predicate
+- https://hellose7.tistory.com/160 (generic 공부 포스팅)
