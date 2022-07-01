@@ -11,3 +11,7 @@
 2022.06.21
 - Reader추상클래스의 skipBuffer 배열은 sub class에서 어떻게 사용되는가
 - CharArrayReader (ByteArrayInputStream과 구조가 비슷)
+
+2022.07.01
+- Stream 기초 예제
+- Function, Supplier, Consumer, Predicate
