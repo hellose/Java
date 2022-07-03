@@ -16,3 +16,6 @@
 - Stream 기초 예제
 - Function, Supplier, Consumer, Predicate
 - https://hellose7.tistory.com/160 (generic 공부 포스팅)
+
+2022.07.02
+- generic 와일드카드 객체 consume, produce 
