@@ -19,3 +19,4 @@
 
 2022.07.02
 - generic 와일드카드 객체 consume, produce 
+- Optional 클래스 map메서드 활용
