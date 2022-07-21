@@ -11,6 +11,7 @@ public class Test {
 		System.out.println(localNow);
 
 		// https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+		
 		// a -> 오전/오후
 		DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd ahh:mm:ss");
 		System.out.println("custom 포맷팅: " + customFormatter.format(localNow));
