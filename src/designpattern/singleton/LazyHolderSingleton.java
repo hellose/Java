@@ -1,4 +1,4 @@
-package DesignPattern.SingletonPattern;
+package designpattern.singleton;
 
 class LazyHolderSingleton {
 

@@ -1,4 +1,4 @@
-package DesignPattern.SingletonPattern;
+package designpattern.singleton;
 
 //TODO - 멀티 스레드 환경 보완 
 public class SingletonTwo {
