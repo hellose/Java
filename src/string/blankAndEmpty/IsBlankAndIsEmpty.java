@@ -1,4 +1,4 @@
-package string;
+package string.blankAndEmpty;
 
 // isEmpty -> length가 0인 경우에만 true
 // isBlank -> 1.공백 또는 2.whitespace만 포함하는 경우 true
