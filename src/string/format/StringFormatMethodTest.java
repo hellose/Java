@@ -1,4 +1,4 @@
-package string;
+package string.format;
 
 public class StringFormatMethodTest {
 
