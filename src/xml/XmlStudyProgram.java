@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -64,6 +66,7 @@ public class XmlStudyProgram {
 
 	}
 
+	// xml 생성
 	private static String createXmlString() throws Exception {
 		Document xmlDocument = DOCUMENT_BUILDER.newDocument();
 
@@ -197,12 +200,22 @@ public class XmlStudyProgram {
 		System.out.println("nodeName: " + nodeName + ", nodeType: " + result);
 		if (type == Node.TEXT_NODE) {
 			String textContent = node.getTextContent();
+			System.out.println("textContent - 길이: " + textContent.length());
+
 			if (textContent.contains("\n")) {
 				int index = textContent.indexOf("\n");
-				System.out.println("textContent - 길이: " + textContent.length() + ", 줄바꿈 문자 위치: " + index);
+				System.out.println("\\n 문자 위치: " + index);
 			} else {
-				System.out.println("textContent - 길이: " + textContent.length() + ", 줄바꿈 없음");
+				System.out.println("\\n 없음");
 			}
+
+			if (textContent.contains("\r")) {
+				int index = textContent.indexOf("\r");
+				System.out.println("\\r 문자 위치: " + index);
+			} else {
+				System.out.println("\\r 없음");
+			}
+
 		}
 	}
 
