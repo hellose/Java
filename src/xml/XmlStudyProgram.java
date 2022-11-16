@@ -4,8 +4,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -54,15 +52,20 @@ public class XmlStudyProgram {
 
 	public static void main(String[] args) throws Exception {
 
-		// 테스트1
-		// String xmlString = createXmlString();
-		// saveFile(xmlString, Constants.SAVE_PATH);
-		// checkXml(xmlString);
+//		// 테스트1
+//		 String xmlString = createXmlString();
+//		 saveFile(xmlString, Constants.SAVE_PATH);
+//		 checkXml(xmlString);
 
 		// 테스트2
+//		String xmlString = readFile(Constants.READ_PATH);
+//		System.out.println(xmlString);
+//		checkXml(xmlString);
+
+		// 테스트3
 		String xmlString = readFile(Constants.READ_PATH);
-		System.out.println(xmlString);
-		checkXml(xmlString);
+		// System.out.println(xmlString);
+		checkXml2(xmlString);
 
 	}
 
@@ -157,6 +160,63 @@ public class XmlStudyProgram {
 			printNodeType(columnChild);
 		}
 		System.out.println();
+
+		System.out.println("COLUMN 엘리먼트의 텍스트 값 확인 - Element.getTextContent()를 사용");
+		Element columnElement = (Element) columnNode;
+		String str = columnElement.getTextContent();
+		if (str == null) {
+			System.out.println("텍스트 스트링 null");
+		} else if (str.equals("")) {
+			System.out.println("\"\"");
+		} else {
+			System.out.println(str);
+		}
+		System.out.println();
+
+		System.out.println("COLUMN 엘리먼트의 텍스트 값 확인 - 텍스트 노드를 검색하여 텍스트노드.getTextContent()를 사용");
+		boolean containTextNode = false;
+
+		for (int i = 0; i < columnChilds.getLength(); i++) {
+			Node columnChild = columnChilds.item(i);
+			if (columnChild.getNodeType() == Node.TEXT_NODE) {
+				containTextNode = true;
+				System.out.println("텍스트 노드 존재");
+
+				String temp = columnChild.getTextContent();
+				System.out.println("텍스트 길이: " + temp.length());
+				if (temp == null) {
+					System.out.println("텍스트 스트링 null");
+				} else if (temp.equals("")) {
+					System.out.println("\"\"");
+				} else {
+					System.out.println(temp + "<-여기가 값");
+				}
+			}
+		}
+		if (containTextNode == false) {
+			System.out.println("텍스트 노드 존재 x");
+		}
+		System.out.println();
+
+	}
+
+	private static void checkXml2(String xmlString) throws Exception {
+		InputSource inputSource = new InputSource();
+		inputSource.setCharacterStream(new StringReader(xmlString));
+
+		Document document = DOCUMENT_BUILDER.newDocument();
+		document = DOCUMENT_BUILDER.parse(inputSource);
+
+		Element firstRowElement = (Element) document.getElementsByTagName("ROW").item(0);
+		System.out.println(firstRowElement.getTextContent() + "<-여기까지");
+
+//		NodeList childNodeList = firstRowElement.getChildNodes();
+//		int childNodeListLength = childNodeList.getLength();
+//		System.out.println("자식 노드 개수: " + childNodeListLength);
+//		for (int i = 0; i < childNodeListLength; i++) {
+//			printNodeType(childNodeList.item(i));
+//		}
+//		System.out.println();
 
 	}
 
