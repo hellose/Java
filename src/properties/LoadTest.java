@@ -11,13 +11,13 @@ public class LoadTest {
 
 	public static void main(String[] args) {
 
-		String fileName = "Sample.properties";
+		String fileName = "TestProperty.properties";
 
 		InputStream is = null;
 		try {
 
 			// 1 ./ -> 현재 워킬디렉토리 GitJava
-//			is = new BufferedInputStream(new FileInputStream("./src/properties/" + fileName));
+			is = new BufferedInputStream(new FileInputStream("./src/properties/" + fileName));
 
 			// 2 절대경로 루트
 //			is = new BufferedInputStream(new FileInputStream("C:\\Users\\owner\\Desktop\\GitJavaWorkspace\\GitJava\\src\\properties\\" + fileName));
@@ -26,8 +26,12 @@ public class LoadTest {
 //			is = new BufferedInputStream(new FileInputStream(
 //					"\\Users\\owner\\Desktop\\GitJavaWorkspace\\GitJava\\src\\properties\\" + fileName));
 
-			is = new BufferedInputStream(
-					new FileInputStream("/Users/owner/Desktop/GitJavaWorkspace/GitJava/src/properties/" + fileName));
+//			is = new BufferedInputStream(
+//					new FileInputStream("/Users/owner/Desktop/GitJavaWorkspace/GitJava/src/properties/" + fileName));
+
+			// 4 파일명만 존재시 현재 워킹디렉토리 GitJava 폴더에 존재하는 fileName 파일
+//			is = new BufferedInputStream(new FileInputStream(fileName));
+
 			Properties props = new Properties();
 			props.load(is);
 
