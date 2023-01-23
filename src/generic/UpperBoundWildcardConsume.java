@@ -6,12 +6,6 @@ public class UpperBoundWildcardConsume {
 
 	public static void main(String[] args) {
 
-		ArrayList<Number> numbers = new ArrayList<>();
-		numbers.add(1.1d);
-		numbers.add(7);
-		numbers.add(3.3f);
-		consumeItem(numbers);
-
 		ArrayList<Integer> integers = new ArrayList<>();
 		integers.add(1);
 		integers.add(10);
@@ -20,12 +14,23 @@ public class UpperBoundWildcardConsume {
 	}
 
 	public static void consumeItem(ArrayList<? extends Number> upperBoundArrayList) {
-		System.out.println("모두 int로 변환");
 
+		// Number 또는 Number의 조상 타입(여기서는 Object)으로는 consume가능
+		Number number = upperBoundArrayList.get(0);
 		for (Number item : upperBoundArrayList) {
 			System.out.println(item.intValue());
 		}
 		System.out.println();
+	}
+
+	public static void consumeItem2(ArrayList<? extends B> upperBoundArrayList) {
+
+		// B또는 B의 조상 타입으로는 consume가능
+		for (int i = 0; i < upperBoundArrayList.size(); i++) {
+			B b = upperBoundArrayList.get(i);
+			A a = upperBoundArrayList.get(i);
+			Object obj = upperBoundArrayList.get(i);
+		}
 	}
 
 }
