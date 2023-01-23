@@ -20,6 +20,9 @@ public class LowerBoundWildcardProducePossible {
 		lowerBoundArrayList.add(new B());
 		lowerBoundArrayList.add(new C());
 		lowerBoundArrayList.add(new D());
+		
+		//null 추가 가능
+		lowerBoundArrayList.add(null);
 	}
 
 }

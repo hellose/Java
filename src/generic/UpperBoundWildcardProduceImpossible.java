@@ -19,6 +19,9 @@ public class UpperBoundWildcardProduceImpossible {
 
 	public static void produceItem(ArrayList<? extends Number> upperBoundArrayList) {
 		// upperBoundArrayList.add 사용 -> 컴파일 에러
+		
+		// 오로지 null만 추가 가능
+		upperBoundArrayList.add(null);
 	}
 
 }

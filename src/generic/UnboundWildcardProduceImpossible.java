@@ -21,6 +21,10 @@ public class UnboundWildcardProduceImpossible {
 
 		// 컴파일러는 이러한 객체 추가(produce) 작업인
 		// ArrayList의 add()메서드를 사용할 수 없게 한다.
+		
+		// 오로지 null만 추가 가능
+		unboundArrayList.add(null);
+		
 	}
 
 }
